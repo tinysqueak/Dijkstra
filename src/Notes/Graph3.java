@@ -77,8 +77,7 @@ public class Graph3 {
 		while(!nodeInPath.equals("A")){
 		   nodeInPath = paths.get(nodeInPath);
 		   myPath.add(nodeInPath);
-		}
-	    
+		}	    
 	    
 
 	}

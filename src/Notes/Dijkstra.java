@@ -2,9 +2,9 @@ package Notes;
 
 import java.util.*;
 
-public class Dijkstra {
+public class Dijkstra implements Next {
 
-	//the previous node from a given node
+	//shortest path
 	public HashMap<String, String> path;
 
 	String startNode;
@@ -12,6 +12,8 @@ public class Dijkstra {
 	//whether is minimum distance or not, selected set
 	private ArrayList<Boolean> k;
 
+	private HashMap<String, Boolean> kMap;
+	
 	//node names
 	private ArrayList<String> nodes;
 
@@ -20,12 +22,26 @@ public class Dijkstra {
 
 	//cumulative distance from start node
 	private ArrayList<Double> dv;
+	
+	private int startNodeIndex;
 
 	public Dijkstra(HashMap<String, HashMap<String, Integer>> nodeDistances, String start) {
 
 		initialize(start, nodeDistances);
 		
-		startNodeIndex = nodeDistances.
+		/*Iterator<String> iterator = nodeDistances.keySet().iterator();
+		
+		for(int i = 0; i < nodeDistances.size(); i++) {
+			
+			if(start.equals(iterator.next())) {
+				
+				startNodeIndex = i;
+				break;
+				
+			}
+			
+		}*/
+		//int startNodeIndex = nodeDistances.
 		
 		/*
 		 * need to establish relationship between nodeDistances maps and k
@@ -50,7 +66,10 @@ public class Dijkstra {
 		initializeK(nodeDistances.size());
 		//supposed to use priority queue?
 
+		initializekMap(nodeDistances);
+		
 		initializePv(nodeDistances.size());
+		
 
 	}
 
@@ -65,6 +84,17 @@ public class Dijkstra {
 
 		}
 
+	}
+	
+	private void initializekMap(HashMap<String, HashMap<String, Integer>> nodeDistances) {
+		
+		kMap = new HashMap<String, Boolean>();
+		
+		Iterator<String> iterator = nodeDistances.keySet().iterator();
+		
+		while(iterator.hasNext()) {
+			kMap.put(iterator.next(), false);
+		}
 	}
 
 	private void initializeDv(int size) {
@@ -89,6 +119,12 @@ public class Dijkstra {
 
 		}
 
+	}
+
+	@Override
+	public ArrayList<String> next(String node1, String node2, Dijkstra dijkstra) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

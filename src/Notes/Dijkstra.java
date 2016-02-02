@@ -2,7 +2,7 @@ package Notes;
 
 import java.util.*;
 
-public class Dijkstra implements Next {
+public class Dijkstra implements Shorty {
 
 	//shortest path
 	public HashMap<String, String> path;
@@ -21,14 +21,26 @@ public class Dijkstra implements Next {
 	private ArrayList<String> pv;
 
 	//cumulative distance from start node
-	private ArrayList<Double> dv;
+	//private ArrayList<Double> dv;
+	
+	private ArrayList<Integer> dv;
 	
 	private int startNodeIndex;
+	
+	private ArrayList<String> nodeIndices;
+	private HashMap<String, HashMap<String, Integer>> nodeDistances;
 
 	public Dijkstra(HashMap<String, HashMap<String, Integer>> nodeDistances, String start) {
 
+		path = new HashMap<String, String>();
+		this.nodeDistances = new HashMap<String, HashMap<String, Integer>>(nodeDistances);
+		System.out.println(nodeDistances);
 		initialize(start, nodeDistances);
 		
+		nodeIndices = new ArrayList<String>(nodeDistances.keySet());
+		dv.set(nodeIndices.indexOf(startNode), 0);
+		
+		evaluatePath(start, 0);
 		/*Iterator<String> iterator = nodeDistances.keySet().iterator();
 		
 		for(int i = 0; i < nodeDistances.size(); i++) {
@@ -70,6 +82,8 @@ public class Dijkstra implements Next {
 		
 		initializePv(nodeDistances.size());
 		
+		System.out.println(dv);
+		
 
 	}
 
@@ -96,8 +110,26 @@ public class Dijkstra implements Next {
 			kMap.put(iterator.next(), false);
 		}
 	}
+	
+	public void test() {
+		
+		System.out.println(nodeIndices);
+	
+	}
 
 	private void initializeDv(int size) {
+		
+		dv = new ArrayList<Integer>();
+		
+		for(int i = 0; i < size; i++) {
+			
+			dv.add(i, Integer.MAX_VALUE);
+			
+		}
+		
+	}
+
+	/*private void initializeDv(int size) {
 
 		dv = new ArrayList<Double>();
 
@@ -107,7 +139,7 @@ public class Dijkstra implements Next {
 
 		}
 
-	}
+	}*/
 
 	private void initializePv(int size) {
 
@@ -119,6 +151,42 @@ public class Dijkstra implements Next {
 
 		}
 
+	}
+	
+	public void evaluatePath(String startNode, int startDistance) {
+		
+		kMap.put(startNode, true);
+		
+		ArrayList<String> distanceKeys = new ArrayList<String>(nodeDistances.get(startNode).keySet());
+		
+		int minDistance = nodeDistances.get(startNode).get(distanceKeys.get(0)) + startDistance;
+		String nextStartNode = distanceKeys.get(0);
+		
+		for(int i = 0; i < nodeDistances.get(startNode).size(); i++) {
+			
+			dv.set(nodeIndices.indexOf(distanceKeys.get(i)), nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance);
+			
+			minDistance = (minDistance < nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance)
+					? minDistance : nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance;
+			nextStartNode = (minDistance < nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance)
+					? nextStartNode : distanceKeys.get(i);
+			
+		}
+		
+		for(int i = 0; i < nodeDistances.get(startNode).size(); i++) {
+			
+			pv.set(nodeIndices.indexOf(distanceKeys.get(i)), startNode);
+			
+		}
+		
+		path.put(startNode, nextStartNode);
+		
+		System.out.println(dv);
+		System.out.println(pv);
+		System.out.println(kMap);
+		
+		//evaluatePath(nextStartNode);
+		
 	}
 
 	@Override

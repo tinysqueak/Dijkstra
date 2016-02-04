@@ -13,7 +13,7 @@ public class Dijkstra implements Shorty {
 	private ArrayList<Boolean> k;
 
 	private HashMap<String, Boolean> kMap;
-	
+
 	//node names
 	private ArrayList<String> nodes;
 
@@ -21,12 +21,11 @@ public class Dijkstra implements Shorty {
 	private ArrayList<String> pv;
 
 	//cumulative distance from start node
-	//private ArrayList<Double> dv;
-	
-	private ArrayList<Integer> dv;
-	
+	private ArrayList<Double> dv;
+	//private ArrayList<Integer> dv;
+
 	private int startNodeIndex;
-	
+
 	private ArrayList<String> nodeIndices;
 	private HashMap<String, HashMap<String, Integer>> nodeDistances;
 
@@ -36,25 +35,25 @@ public class Dijkstra implements Shorty {
 		this.nodeDistances = new HashMap<String, HashMap<String, Integer>>(nodeDistances);
 		System.out.println(nodeDistances);
 		initialize(start, nodeDistances);
-		
+
 		nodeIndices = new ArrayList<String>(nodeDistances.keySet());
-		dv.set(nodeIndices.indexOf(startNode), 0);
-		
-		evaluatePath(start, 0);
+		dv.set(nodeIndices.indexOf(startNode), 0.0);
+
+		evaluatePath(start, 0.0);
 		/*Iterator<String> iterator = nodeDistances.keySet().iterator();
-		
+
 		for(int i = 0; i < nodeDistances.size(); i++) {
-			
+
 			if(start.equals(iterator.next())) {
-				
+
 				startNodeIndex = i;
 				break;
-				
+
 			}
-			
+
 		}*/
 		//int startNodeIndex = nodeDistances.
-		
+
 		/*
 		 * need to establish relationship between nodeDistances maps and k
 		 * order of nodes isn't obvious
@@ -71,7 +70,7 @@ public class Dijkstra implements Shorty {
 	private void initialize(String start, HashMap<String, HashMap<String, Integer>> nodeDistances) {
 
 		this.startNode = start;
-		
+
 		initializeDv(nodeDistances.size());
 
 		//initialize k
@@ -79,11 +78,11 @@ public class Dijkstra implements Shorty {
 		//supposed to use priority queue?
 
 		initializekMap(nodeDistances);
-		
+
 		initializePv(nodeDistances.size());
-		
+
 		System.out.println(dv);
-		
+
 
 	}
 
@@ -99,37 +98,37 @@ public class Dijkstra implements Shorty {
 		}
 
 	}
-	
+
 	private void initializekMap(HashMap<String, HashMap<String, Integer>> nodeDistances) {
-		
+
 		kMap = new HashMap<String, Boolean>();
-		
+
 		Iterator<String> iterator = nodeDistances.keySet().iterator();
-		
+
 		while(iterator.hasNext()) {
 			kMap.put(iterator.next(), false);
 		}
 	}
-	
-	public void test() {
-		
-		System.out.println(nodeIndices);
-	
-	}
 
-	private void initializeDv(int size) {
-		
-		dv = new ArrayList<Integer>();
-		
-		for(int i = 0; i < size; i++) {
-			
-			dv.add(i, Integer.MAX_VALUE);
-			
-		}
-		
+	public void test() {
+
+		System.out.println(nodeIndices);
+
 	}
 
 	/*private void initializeDv(int size) {
+
+		dv = new ArrayList<Integer>();
+
+		for(int i = 0; i < size; i++) {
+
+			dv.add(i, Integer.MAX_VALUE);
+
+		}
+
+	}*/
+
+	private void initializeDv(int size) {
 
 		dv = new ArrayList<Double>();
 
@@ -139,7 +138,7 @@ public class Dijkstra implements Shorty {
 
 		}
 
-	}*/
+	}
 
 	private void initializePv(int size) {
 
@@ -152,41 +151,73 @@ public class Dijkstra implements Shorty {
 		}
 
 	}
-	
-	public void evaluatePath(String startNode, int startDistance) {
-		
+
+	public void evaluatePath(String startNode, double startDistance) {
+
+		double nextMinDistance = Double.POSITIVE_INFINITY;
+		String nextStartNode = "";
+
+
+
 		kMap.put(startNode, true);
-		
+
 		ArrayList<String> distanceKeys = new ArrayList<String>(nodeDistances.get(startNode).keySet());
+
+		System.out.println("Nodes connected to " + startNode + ": " + distanceKeys);
 		
-		int minDistance = nodeDistances.get(startNode).get(distanceKeys.get(0)) + startDistance;
-		String nextStartNode = distanceKeys.get(0);
-		
+		/*double minDistance = nodeDistances.get(startNode).get(distanceKeys.get(0)) + startDistance;
+		String nextStartNode = distanceKeys.get(0);*/
+
 		for(int i = 0; i < nodeDistances.get(startNode).size(); i++) {
-			
+
 			dv.set(nodeIndices.indexOf(distanceKeys.get(i)), nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance);
-			
-			minDistance = (minDistance < nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance)
+
+			/*minDistance = (minDistance < nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance)
 					? minDistance : nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance;
 			nextStartNode = (minDistance < nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance)
-					? nextStartNode : distanceKeys.get(i);
-			
+					? nextStartNode : distanceKeys.get(i);*/
+
 		}
-		
+
 		for(int i = 0; i < nodeDistances.get(startNode).size(); i++) {
-			
+
 			pv.set(nodeIndices.indexOf(distanceKeys.get(i)), startNode);
-			
+
 		}
-		
+
+		for(int i = 0; i < dv.size(); i++) {
+
+			//loop through all available node distances except the start node
+			if(i != nodeIndices.indexOf(startNode) && dv.get(i) < nextMinDistance) {
+
+				nextMinDistance = dv.get(i); 
+				nextStartNode = nodeIndices.get(i);
+
+			}
+		}
+
+		System.out.println("Next start node is: " + nextStartNode);
+		System.out.println("Next minDistance is: " + nextMinDistance);
 		path.put(startNode, nextStartNode);
 		
+		//path doesn't print out correctly for Graph3 sample graph?
+		System.out.println("Path is: " + path);
+
+		System.out.println();
+
 		System.out.println(dv);
 		System.out.println(pv);
 		System.out.println(kMap);
-		
-		//evaluatePath(nextStartNode);
-		
+
+		System.out.println();
+
+
+		if(kMap.containsValue(false)) {
+
+			evaluatePath(nextStartNode, nextMinDistance);
+
+		}
+
 	}
 
 	@Override

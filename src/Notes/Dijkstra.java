@@ -157,60 +157,60 @@ public class Dijkstra implements Shorty {
 		double nextMinDistance = Double.POSITIVE_INFINITY;
 		String nextStartNode = "";
 
+		if(kMap.containsValue(false)) {
 
+			kMap.put(startNode, true);
 
-		kMap.put(startNode, true);
+			ArrayList<String> distanceKeys = new ArrayList<String>(nodeDistances.get(startNode).keySet());
 
-		ArrayList<String> distanceKeys = new ArrayList<String>(nodeDistances.get(startNode).keySet());
+			System.out.println("Nodes connected to " + startNode + ": " + distanceKeys);
 
-		System.out.println("Nodes connected to " + startNode + ": " + distanceKeys);
-		
-		/*double minDistance = nodeDistances.get(startNode).get(distanceKeys.get(0)) + startDistance;
+			/*double minDistance = nodeDistances.get(startNode).get(distanceKeys.get(0)) + startDistance;
 		String nextStartNode = distanceKeys.get(0);*/
 
-		for(int i = 0; i < nodeDistances.get(startNode).size(); i++) {
+			for(int i = 0; i < nodeDistances.get(startNode).size(); i++) {
 
-			dv.set(nodeIndices.indexOf(distanceKeys.get(i)), nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance);
+				dv.set(nodeIndices.indexOf(distanceKeys.get(i)), nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance);
 
-			/*minDistance = (minDistance < nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance)
+				/*minDistance = (minDistance < nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance)
 					? minDistance : nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance;
 			nextStartNode = (minDistance < nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance)
 					? nextStartNode : distanceKeys.get(i);*/
 
-		}
+			}
 
-		for(int i = 0; i < nodeDistances.get(startNode).size(); i++) {
+			for(int i = 0; i < nodeDistances.get(startNode).size(); i++) {
 
-			pv.set(nodeIndices.indexOf(distanceKeys.get(i)), startNode);
-
-		}
-
-		for(int i = 0; i < dv.size(); i++) {
-
-			//loop through all available node distances except the start node
-			if(i != nodeIndices.indexOf(startNode) && dv.get(i) < nextMinDistance) {
-
-				nextMinDistance = dv.get(i); 
-				nextStartNode = nodeIndices.get(i);
+				pv.set(nodeIndices.indexOf(distanceKeys.get(i)), startNode);
 
 			}
+
+			for(int i = 0; i < dv.size(); i++) {
+
+				//loop through all available node distances except the start node
+				if(i != nodeIndices.indexOf(startNode) && dv.get(i) < nextMinDistance) {
+
+					nextMinDistance = dv.get(i); 
+					nextStartNode = nodeIndices.get(i);
+
+				}
+			}
+
+			System.out.println("Next start node is: " + nextStartNode);
+			System.out.println("Next minDistance is: " + nextMinDistance);
+			path.put(startNode, nextStartNode);
+
+			//path doesn't print out correctly for Graph3 sample graph?
+			System.out.println("Path is: " + path);
+
+			System.out.println();
+
+			System.out.println(dv);
+			System.out.println(pv);
+			System.out.println(kMap);
+
+			System.out.println();
 		}
-
-		System.out.println("Next start node is: " + nextStartNode);
-		System.out.println("Next minDistance is: " + nextMinDistance);
-		path.put(startNode, nextStartNode);
-		
-		//path doesn't print out correctly for Graph3 sample graph?
-		System.out.println("Path is: " + path);
-
-		System.out.println();
-
-		System.out.println(dv);
-		System.out.println(pv);
-		System.out.println(kMap);
-
-		System.out.println();
-
 
 		if(kMap.containsValue(false)) {
 
@@ -221,7 +221,7 @@ public class Dijkstra implements Shorty {
 	}
 
 	@Override
-	public ArrayList<String> next(String node1, String node2, Dijkstra dijkstra) {
+	public ArrayList<String> next(String targetNode, Dijkstra dijkstra) {
 		// TODO Auto-generated method stub
 		return null;
 	}

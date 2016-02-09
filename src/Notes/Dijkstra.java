@@ -156,9 +156,9 @@ public class Dijkstra implements Shorty {
 
 		double nextMinDistance = Double.POSITIVE_INFINITY;
 		String nextStartNode = "";
-
+		
 		kMap.put(startNode, true);
-
+				
 		if(kMap.containsValue(false)) {
 
 			ArrayList<String> distanceKeys = new ArrayList<String>(nodeDistances.get(startNode).keySet());			
@@ -169,11 +169,12 @@ public class Dijkstra implements Shorty {
 
 			for(int i = 0; i < nodeDistances.get(startNode).size(); i++) {
 
-				//if((nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance) < dv.get(nodeIndices.indexOf(distanceKeys.get(i)))) {
+				if((nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance) < dv.get(nodeIndices.indexOf(distanceKeys.get(i)))) {
 					
 					dv.set(nodeIndices.indexOf(distanceKeys.get(i)), nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance);
+					pv.set(nodeIndices.indexOf(distanceKeys.get(i)), startNode);
 					
-				//}
+				}
 				/*minDistance = (minDistance < nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance)
 					? minDistance : nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance;
 			nextStartNode = (minDistance < nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance)
@@ -181,16 +182,16 @@ public class Dijkstra implements Shorty {
 
 			}
 
-			for(int i = 0; i < nodeDistances.get(startNode).size(); i++) {
+			/*for(int i = 0; i < nodeDistances.get(startNode).size(); i++) {
 
 				pv.set(nodeIndices.indexOf(distanceKeys.get(i)), startNode);
 
-			}
+			}*/
 
 			for(int i = 0; i < dv.size(); i++) {
 
 				//loop through all available node distances except the start node
-				if(i != nodeIndices.indexOf(startNode) && dv.get(i) < nextMinDistance) {
+				if(i != nodeIndices.indexOf(startNode) && i != nodeIndices.indexOf(this.startNode) && dv.get(i) < nextMinDistance) {
 
 					nextMinDistance = dv.get(i); 
 					nextStartNode = nodeIndices.get(i);
@@ -217,13 +218,15 @@ public class Dijkstra implements Shorty {
 
 			System.out.println();
 
-		}
-
-		if(kMap.containsValue(false)) {
-
 			evaluatePath(nextStartNode, nextMinDistance);
-
+			
 		}
+
+		/*if(kMap.containsValue(false)) {
+
+			
+
+		}*/
 
 	}
 

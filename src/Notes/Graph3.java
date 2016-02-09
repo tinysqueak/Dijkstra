@@ -80,8 +80,8 @@ public class Graph3 {
 		}*/
 
 		//myd.test();
-
-
+		System.out.println(myd.next("A", myd));
+		
 	}
 
 	/*private void play(){

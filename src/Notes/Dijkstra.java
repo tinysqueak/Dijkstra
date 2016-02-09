@@ -2,6 +2,11 @@ package Notes;
 
 import java.util.*;
 
+/**
+ * 
+ * @author William Yang
+ *
+ */
 public class Dijkstra implements Shorty {
 
 	//shortest path
@@ -157,6 +162,7 @@ public class Dijkstra implements Shorty {
 		double nextMinDistance = Double.POSITIVE_INFINITY;
 		String nextStartNode = "";
 		
+		//can maybe put this at the end of the if statement
 		kMap.put(startNode, true);
 				
 		if(kMap.containsValue(false)) {
@@ -207,7 +213,6 @@ public class Dijkstra implements Shorty {
 			//won't work for more complicated graphs
 			path.put(startNode, nextStartNode);
 
-			//path doesn't print out correctly for Graph3 sample graph?
 			System.out.println("Path is: " + path);
 
 			System.out.println("Distances are: " + dv);
@@ -229,11 +234,37 @@ public class Dijkstra implements Shorty {
 		}*/
 
 	}
+	
+	public String priorNode(String node) {
+		
+		return pv.get(nodeIndices.indexOf(node));
+		
+	}
 
 	@Override
 	public ArrayList<String> next(String targetNode, Dijkstra dijkstra) {
-		// TODO Auto-generated method stub
-		return null;
+
+		ArrayList<String> shortestPath = new ArrayList<String>();
+		
+		String currentNode = targetNode;
+		
+		while(!shortestPath.contains(startNode)) {
+			
+			shortestPath.add(targetNode);
+			targetNode = pv.get(nodeIndices.indexOf(targetNode));
+			
+		}
+		
+		for(int i = 0; i < shortestPath.size() / 2; i++) {
+			
+			String temp = shortestPath.get(i);
+			
+			shortestPath.set(i, shortestPath.get(shortestPath.size() - 1 - i));
+			shortestPath.set(shortestPath.size() - 1 - i, temp);
+			
+		}
+		
+		return shortestPath;
 	}
 
 

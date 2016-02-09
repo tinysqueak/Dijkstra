@@ -7,7 +7,11 @@ import java.util.Iterator;
 
 // This is half baked code but it gives you some working code that works with Hashmaps
 // like are required in the Dijkstra's algorithm assignment...
-
+/**
+ * 
+ * @author William Yang
+ *
+ */
 public class Graph3 {
 
 	private HashMap<String, ArrayList<String>> adjacencies;
@@ -80,7 +84,31 @@ public class Graph3 {
 		}*/
 
 		//myd.test();
-		System.out.println(myd.next("A", myd));
+		System.out.println(myd.next("C", myd));
+		
+		System.out.println();
+		
+		System.out.println("TESTING TEST GRAPH");
+		
+		
+		HashMap<String, HashMap<String, Integer>> testGraph = new HashMap<String, HashMap<String, Integer>>();
+		
+		HashMap<String, Integer> gDistances = new HashMap<String, Integer>();
+		gDistances.put("H", 3);
+		gDistances.put("D", 2);
+		
+		HashMap<String, Integer> hDistances = new HashMap<String, Integer>();
+		HashMap<String, Integer> dDistances = new HashMap<String, Integer>();
+
+		//may need to fix case where there are no doubly linked nodes
+		testGraph.put("G", gDistances);
+		testGraph.put("H", hDistances);
+		testGraph.put("D", dDistances);
+		
+		Dijkstra test = new Dijkstra(testGraph, "G");
+		System.out.println("Prior Node to H: " + test.priorNode("H"));
+		System.out.println(test.next("H", test));
+		
 		
 	}
 

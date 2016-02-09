@@ -211,7 +211,8 @@ public class Dijkstra implements Shorty {
 
 			//need to create path recursively based on previous node, current implementation
 			//won't work for more complicated graphs
-			path.put(startNode, nextStartNode);
+			//path.put(startNode, nextStartNode);
+			path.put(pv.get(nodeIndices.indexOf(nextStartNode)), nextStartNode);
 
 			System.out.println("Path is: " + path);
 
@@ -245,9 +246,7 @@ public class Dijkstra implements Shorty {
 	public ArrayList<String> next(String targetNode, Dijkstra dijkstra) {
 
 		ArrayList<String> shortestPath = new ArrayList<String>();
-		
-		String currentNode = targetNode;
-		
+				
 		while(!shortestPath.contains(startNode)) {
 			
 			shortestPath.add(targetNode);

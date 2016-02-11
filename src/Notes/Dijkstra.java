@@ -23,7 +23,7 @@ public class Dijkstra implements Shorty {
 	private ArrayList<String> nodes;
 
 	//previous node for a given node
-	private ArrayList<String> pv;
+	public ArrayList<String> pv;
 
 	//cumulative distance from start node
 	private ArrayList<Double> dv;
@@ -31,9 +31,14 @@ public class Dijkstra implements Shorty {
 
 	private int startNodeIndex;
 
-	private ArrayList<String> nodeIndices;
+	public ArrayList<String> nodeIndices;
 	private HashMap<String, HashMap<String, Integer>> nodeDistances;
 
+	/**
+	 * 
+	 * @param nodeDistances
+	 * @param start
+	 */
 	public Dijkstra(HashMap<String, HashMap<String, Integer>> nodeDistances, String start) {
 
 		path = new HashMap<String, String>();
@@ -72,6 +77,11 @@ public class Dijkstra implements Shorty {
 
 	}
 
+	/**
+	 * 
+	 * @param start
+	 * @param nodeDistances
+	 */
 	private void initialize(String start, HashMap<String, HashMap<String, Integer>> nodeDistances) {
 
 		this.startNode = start;
@@ -91,6 +101,10 @@ public class Dijkstra implements Shorty {
 
 	}
 
+	/**
+	 * 
+	 * @param kSize
+	 */
 	private void initializeK(int kSize) {
 		//for each element in k, make it false
 
@@ -104,6 +118,10 @@ public class Dijkstra implements Shorty {
 
 	}
 
+	/**
+	 * 
+	 * @param nodeDistances
+	 */
 	private void initializekMap(HashMap<String, HashMap<String, Integer>> nodeDistances) {
 
 		kMap = new HashMap<String, Boolean>();
@@ -115,6 +133,9 @@ public class Dijkstra implements Shorty {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public void test() {
 
 		System.out.println(nodeIndices);
@@ -133,6 +154,10 @@ public class Dijkstra implements Shorty {
 
 	}*/
 
+	/**
+	 * 
+	 * @param size
+	 */
 	private void initializeDv(int size) {
 
 		dv = new ArrayList<Double>();
@@ -145,6 +170,10 @@ public class Dijkstra implements Shorty {
 
 	}
 
+	/**
+	 * 
+	 * @param size
+	 */
 	private void initializePv(int size) {
 
 		pv = new ArrayList<String>();
@@ -157,6 +186,11 @@ public class Dijkstra implements Shorty {
 
 	}
 
+	/**
+	 * 
+	 * @param startNode
+	 * @param startDistance
+	 */
 	public void evaluatePath(String startNode, double startDistance) {
 
 		double nextMinDistance = Double.POSITIVE_INFINITY;
@@ -196,8 +230,8 @@ public class Dijkstra implements Shorty {
 
 			for(int i = 0; i < dv.size(); i++) {
 
-				//loop through all available node distances except the start node
-				if(i != nodeIndices.indexOf(startNode) && i != nodeIndices.indexOf(this.startNode) && dv.get(i) < nextMinDistance) {
+				//loop through all unvisited node distances
+				if(!kMap.get(nodeIndices.get(i)) && dv.get(i) < nextMinDistance) {
 
 					nextMinDistance = dv.get(i); 
 					nextStartNode = nodeIndices.get(i);
@@ -236,34 +270,15 @@ public class Dijkstra implements Shorty {
 
 	}
 	
+	/**
+	 * 
+	 * @param node
+	 * @return
+	 */
 	public String priorNode(String node) {
 		
 		return pv.get(nodeIndices.indexOf(node));
 		
-	}
-
-	@Override
-	public ArrayList<String> next(String targetNode, Dijkstra dijkstra) {
-
-		ArrayList<String> shortestPath = new ArrayList<String>();
-				
-		while(!shortestPath.contains(startNode)) {
-			
-			shortestPath.add(targetNode);
-			targetNode = pv.get(nodeIndices.indexOf(targetNode));
-			
-		}
-		
-		for(int i = 0; i < shortestPath.size() / 2; i++) {
-			
-			String temp = shortestPath.get(i);
-			
-			shortestPath.set(i, shortestPath.get(shortestPath.size() - 1 - i));
-			shortestPath.set(shortestPath.size() - 1 - i, temp);
-			
-		}
-		
-		return shortestPath;
 	}
 
 

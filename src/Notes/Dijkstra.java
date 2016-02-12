@@ -3,160 +3,74 @@ package Notes;
 import java.util.*;
 
 /**
- * 
+ * The main Dijkstra class that performs Dijkstra's algorithm given a graph and 
+ * a start node.
  * @author William Yang
  *
  */
 public class Dijkstra implements Shorty {
 
+	//node from which to begin calculations
+	public String startNode;
+
 	//shortest path
 	public HashMap<String, String> path;
 
-	String startNode;
-
-	//whether is minimum distance or not, selected set
-	private ArrayList<Boolean> k;
-
-	private HashMap<String, Boolean> kMap;
-
-	//node names
-	private ArrayList<String> nodes;
+	//used primarily to retrieve the indices of various nodes
+	public ArrayList<String> nodeIndices;
 
 	//previous node for a given node
 	public ArrayList<String> pv;
 
+	//whether a node has been visited or not
+	private HashMap<String, Boolean> kMap;
+
 	//cumulative distance from start node
 	private ArrayList<Double> dv;
-	//private ArrayList<Integer> dv;
 
-	private int startNodeIndex;
-
-	public ArrayList<String> nodeIndices;
+	//adjacency list representation of a graph
 	private HashMap<String, HashMap<String, Integer>> nodeDistances;
 
 	/**
-	 * 
-	 * @param nodeDistances
-	 * @param start
+	 * Creates a new <code>Dijkstra</code> by initializing the instance fields and 
+	 * evaluating the path.
+	 * @param nodeDistances The adjacency list representation of a graph to be used to 
+	 * calculate the shortest paths from.
+	 * @param start The start node.
 	 */
 	public Dijkstra(HashMap<String, HashMap<String, Integer>> nodeDistances, String start) {
 
-		path = new HashMap<String, String>();
-		this.nodeDistances = new HashMap<String, HashMap<String, Integer>>(nodeDistances);
-		System.out.println(nodeDistances);
 		initialize(start, nodeDistances);
-
-		nodeIndices = new ArrayList<String>(nodeDistances.keySet());
-		dv.set(nodeIndices.indexOf(startNode), 0.0);
-
 		evaluatePath(start, 0.0);
-		/*Iterator<String> iterator = nodeDistances.keySet().iterator();
-
-		for(int i = 0; i < nodeDistances.size(); i++) {
-
-			if(start.equals(iterator.next())) {
-
-				startNodeIndex = i;
-				break;
-
-			}
-
-		}*/
-		//int startNodeIndex = nodeDistances.
-
-		/*
-		 * need to establish relationship between nodeDistances maps and k
-		 * order of nodes isn't obvious
-		 * 
-		 * brute force = iterate through nodeDistances until key == start, iteration number
-		 * then equals start index, which index of k to set true. 
-		 * 
-		 * Change k to a Map?
-		 */
-
 
 	}
 
 	/**
-	 * 
-	 * @param start
-	 * @param nodeDistances
+	 * Initializes the <code>Dijkstra</code> class instance fields and sets the 
+	 * startNode's distance to 0.0 and sets it's kMap visited value to true.
+	 * @param start The start node.
+	 * @param nodeDistances Adjacency list representation of a graph to be used to calculate 
+	 * the shortest paths from.
 	 */
 	private void initialize(String start, HashMap<String, HashMap<String, Integer>> nodeDistances) {
 
-		this.startNode = start;
+		startNode = start;
+		path = new HashMap<String, String>();
+		this.nodeDistances = new HashMap<String, HashMap<String, Integer>>(nodeDistances);
+		nodeIndices = new ArrayList<String>(nodeDistances.keySet());
 
 		initializeDv(nodeDistances.size());
-
-		//initialize k
-		initializeK(nodeDistances.size());
-		//supposed to use priority queue?
-
 		initializekMap(nodeDistances);
-
 		initializePv(nodeDistances.size());
 
-		//System.out.println(dv);
-
-
-	}
-
-	/**
-	 * 
-	 * @param kSize
-	 */
-	private void initializeK(int kSize) {
-		//for each element in k, make it false
-
-		k = new ArrayList<Boolean>();
-
-		for(int i = 0; i < kSize; i++) {
-
-			k.add(false);
-
-		}
+		dv.set(nodeIndices.indexOf(start), 0.0);
+		kMap.put(start, true);
 
 	}
 
 	/**
-	 * 
-	 * @param nodeDistances
-	 */
-	private void initializekMap(HashMap<String, HashMap<String, Integer>> nodeDistances) {
-
-		kMap = new HashMap<String, Boolean>();
-
-		Iterator<String> iterator = nodeDistances.keySet().iterator();
-
-		while(iterator.hasNext()) {
-			kMap.put(iterator.next(), false);
-		}
-	}
-
-	/**
-	 * 
-	 */
-	public void test() {
-
-		System.out.println(nodeIndices);
-
-	}
-
-	/*private void initializeDv(int size) {
-
-		dv = new ArrayList<Integer>();
-
-		for(int i = 0; i < size; i++) {
-
-			dv.add(i, Integer.MAX_VALUE);
-
-		}
-
-	}*/
-
-	/**
-	 * 
-	 * @param size
+	 * Initializes dv with the default value of Double.POSITIVE_INFINITY.
+	 * @param size Number of nodes in the graph.
 	 */
 	private void initializeDv(int size) {
 
@@ -171,8 +85,24 @@ public class Dijkstra implements Shorty {
 	}
 
 	/**
-	 * 
-	 * @param size
+	 * Initializes kMap, setting all nodes to unvisited (<code>false</code>)
+	 * @param nodeDistances Adjacency list representation of a graph to be used to calculate 
+	 * the shortest paths from.
+	 */
+	private void initializekMap(HashMap<String, HashMap<String, Integer>> nodeDistances) {
+
+		kMap = new HashMap<String, Boolean>();
+
+		Iterator<String> iterator = nodeDistances.keySet().iterator();
+
+		while(iterator.hasNext()) {
+			kMap.put(iterator.next(), false);
+		}
+	}
+
+	/**
+	 * Initializes pv, setting the previous nodes for all nodes to null.
+	 * @param size Number of nodes in the graph.
 	 */
 	private void initializePv(int size) {
 
@@ -187,50 +117,41 @@ public class Dijkstra implements Shorty {
 	}
 
 	/**
+	 * Perform's Dijkstra's algorithm recursively, beginning with the startNode. 
 	 * 
-	 * @param startNode
-	 * @param startDistance
+	 * @param startNode The node from which to compare neighboring node's distances.
+	 * @param startDistance The cumulative distance from the initial startNode.
 	 */
 	public void evaluatePath(String startNode, double startDistance) {
 
 		double nextMinDistance = Double.POSITIVE_INFINITY;
 		String nextStartNode = "";
-		
-		//can maybe put this at the end of the if statement
-		kMap.put(startNode, true);
-				
+
+		//algorithm continues recursively until all the nodes have been visited
 		if(kMap.containsValue(false)) {
 
+			//nodes that current startNode is connected to
 			ArrayList<String> distanceKeys = new ArrayList<String>(nodeDistances.get(startNode).keySet());			
-			System.out.println("Nodes connected to " + startNode + ": " + distanceKeys);
 
-			/*double minDistance = nodeDistances.get(startNode).get(distanceKeys.get(0)) + startDistance;
-		String nextStartNode = distanceKeys.get(0);*/
-
+			//loops through all of the nodes that current startNode is connected to
 			for(int i = 0; i < nodeDistances.get(startNode).size(); i++) {
 
+				//updates distance and previous node only if the new distance is less than the current one
 				if((nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance) < dv.get(nodeIndices.indexOf(distanceKeys.get(i)))) {
-					
+
 					dv.set(nodeIndices.indexOf(distanceKeys.get(i)), nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance);
 					pv.set(nodeIndices.indexOf(distanceKeys.get(i)), startNode);
-					
+
 				}
-				/*minDistance = (minDistance < nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance)
-					? minDistance : nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance;
-			nextStartNode = (minDistance < nodeDistances.get(startNode).get(distanceKeys.get(i)) + startDistance)
-					? nextStartNode : distanceKeys.get(i);*/
 
 			}
 
-			/*for(int i = 0; i < nodeDistances.get(startNode).size(); i++) {
-
-				pv.set(nodeIndices.indexOf(distanceKeys.get(i)), startNode);
-
-			}*/
-
+			/*
+			 * Loop through all unvisited nodes to find nextStartNode. 
+			 * Unvisited node with the least distance will be the nextStartNode.
+			 */
 			for(int i = 0; i < dv.size(); i++) {
-
-				//loop through all unvisited node distances
+			
 				if(!kMap.get(nodeIndices.get(i)) && dv.get(i) < nextMinDistance) {
 
 					nextMinDistance = dv.get(i); 
@@ -239,48 +160,14 @@ public class Dijkstra implements Shorty {
 				}
 
 			}
-			
-			System.out.println("Next start node is: " + nextStartNode);
-			System.out.println("Next minDistance is: " + nextMinDistance);
 
-			//need to create path recursively based on previous node, current implementation
-			//won't work for more complicated graphs
-			//path.put(startNode, nextStartNode);
-			path.put(pv.get(nodeIndices.indexOf(nextStartNode)), nextStartNode);
-
-			System.out.println("Path is: " + path);
-
-			System.out.println("Distances are: " + dv);
-			System.out.println("Previous nodes are: " + pv);
-			System.out.println("Visited Nodes: " + kMap);
-
-			System.out.println("kMap contains false: " + kMap.containsValue(false));
-
-			System.out.println();
-
+			path.put(startNode, nextStartNode);
+			kMap.put(startNode, true);
 			evaluatePath(nextStartNode, nextMinDistance);
-			
+
 		}
 
-		/*if(kMap.containsValue(false)) {
-
-			
-
-		}*/
-
 	}
-	
-	/**
-	 * 
-	 * @param node
-	 * @return
-	 */
-	public String priorNode(String node) {
-		
-		return pv.get(nodeIndices.indexOf(node));
-		
-	}
-
 
 
 }

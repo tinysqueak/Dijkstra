@@ -3,7 +3,7 @@ package Notes;
 import java.util.*;
 
 /**
- * 
+ * Some test graphs!
  * @author William Yang
  *
  */

@@ -3,7 +3,7 @@ package Notes;
 import java.util.*;
 
 /**
- * The main Dijkstra class that performs Dijkstra's algorithm given a graph and 
+ * The main Dijkstra class that performs Dijkstra's algorithm given a graph and
  * a start node.
  * @author William Yang
  *
@@ -32,9 +32,9 @@ public class Dijkstra implements Shorty {
 	private HashMap<String, HashMap<String, Integer>> nodeDistances;
 
 	/**
-	 * Creates a new <code>Dijkstra</code> by initializing the instance fields and 
+	 * Creates a new <code>Dijkstra</code> by initializing the instance fields and
 	 * evaluating the path.
-	 * @param nodeDistances The adjacency list representation of a graph to be used to 
+	 * @param nodeDistances The adjacency list representation of a graph to be used to
 	 * calculate the shortest paths from.
 	 * @param start The start node.
 	 */
@@ -46,10 +46,10 @@ public class Dijkstra implements Shorty {
 	}
 
 	/**
-	 * Initializes the <code>Dijkstra</code> class instance fields and sets the 
+	 * Initializes the <code>Dijkstra</code> class instance fields and sets the
 	 * startNode's distance to 0.0 and sets it's kMap visited value to true.
 	 * @param start The start node.
-	 * @param nodeDistances Adjacency list representation of a graph to be used to calculate 
+	 * @param nodeDistances Adjacency list representation of a graph to be used to calculate
 	 * the shortest paths from.
 	 */
 	private void initialize(String start, HashMap<String, HashMap<String, Integer>> nodeDistances) {
@@ -86,7 +86,7 @@ public class Dijkstra implements Shorty {
 
 	/**
 	 * Initializes kMap, setting all nodes to unvisited (<code>false</code>)
-	 * @param nodeDistances Adjacency list representation of a graph to be used to calculate 
+	 * @param nodeDistances Adjacency list representation of a graph to be used to calculate
 	 * the shortest paths from.
 	 */
 	private void initializekMap(HashMap<String, HashMap<String, Integer>> nodeDistances) {
@@ -117,8 +117,8 @@ public class Dijkstra implements Shorty {
 	}
 
 	/**
-	 * Perform's Dijkstra's algorithm recursively, beginning with the startNode. 
-	 * 
+	 * Perform's Dijkstra's algorithm recursively, beginning with the startNode.
+	 *
 	 * @param startNode The node from which to compare neighboring node's distances.
 	 * @param startDistance The cumulative distance from the initial startNode.
 	 */
@@ -131,7 +131,7 @@ public class Dijkstra implements Shorty {
 		if(kMap.containsValue(false)) {
 
 			//nodes that current startNode is connected to
-			ArrayList<String> distanceKeys = new ArrayList<String>(nodeDistances.get(startNode).keySet());			
+			ArrayList<String> distanceKeys = new ArrayList<String>(nodeDistances.get(startNode).keySet());
 
 			//loops through all of the nodes that current startNode is connected to
 			for(int i = 0; i < nodeDistances.get(startNode).size(); i++) {
@@ -147,14 +147,14 @@ public class Dijkstra implements Shorty {
 			}
 
 			/*
-			 * Loop through all unvisited nodes to find nextStartNode. 
+			 * Loop through all unvisited nodes to find nextStartNode.
 			 * Unvisited node with the least distance will be the nextStartNode.
 			 */
 			for(int i = 0; i < dv.size(); i++) {
-			
+
 				if(!kMap.get(nodeIndices.get(i)) && dv.get(i) < nextMinDistance) {
 
-					nextMinDistance = dv.get(i); 
+					nextMinDistance = dv.get(i);
 					nextStartNode = nodeIndices.get(i);
 
 				}

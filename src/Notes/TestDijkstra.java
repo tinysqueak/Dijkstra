@@ -92,7 +92,7 @@ public class TestDijkstra {
 		presentationGraph.put("H", hNodes);
 
 		Dijkstra presentationDijkstra = new Dijkstra(presentationGraph, "G");
-		System.out.println(Shorty.next("E", presentationDijkstra));        
+		System.out.println(Shorty.next("E", presentationDijkstra));
 
 	}
 
